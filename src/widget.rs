@@ -8,20 +8,6 @@ pub enum Align {
     Right,
 }
 
-/// Implements `from_str` for the Align structure.
-impl Align {
-    /// Tries to get the enum by its string-identifier.
-    /// Note: Only lowercase letters will be detected.
-    pub fn from_str(string: &str) -> Option<Align> {
-        match string {
-            "left" => Some(Align::Left),
-            "centered" => Some(Align::Centered),
-            "right" => Some(Align::Right),
-            _ => None,
-        }
-    }
-}
-
 /// Implements basic traits for custom user-defined widgets.
 pub trait HWidget {
     /// Invoked when the widget should be added.

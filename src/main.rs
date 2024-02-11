@@ -9,7 +9,6 @@ mod macros;
 mod config;
 mod constants;
 mod r#loop;
-mod structures;
 mod ui;
 mod utils;
 mod widget;
@@ -22,7 +21,6 @@ use gtk::gio::ApplicationFlags;
 use gtk::prelude::*;
 use gtk::*;
 use gtk_layer_shell::Edge;
-use json::JsonValue;
 
 fn get_anchors() -> [(gtk_layer_shell::Edge, bool); 4] {
     [
@@ -121,21 +119,6 @@ fn set_visual(window: &ApplicationWindow, screen: Option<&Screen>) {
                                              // F.
         }
     }
-}
-
-/// Converts the value of a child inside `background` to a `f64`.
-fn get_background_float(cfg: &JsonValue, identifier: &str, from_255: bool) -> f64 {
-    let mut res = cfg[RUSTBAR_ROOT_JSON][identifier]
-        .as_f64()
-        .unwrap_or_else(|| panic!("[ERROR] Failed converting hybrid:{identifier} to f64!"));
-
-    // Only divide by 255 if explicitly told to.
-    if from_255 {
-        res /= 255.0;
-    }
-
-    // Return the result.
-    res.clamp(0.0, 255.0)
 }
 
 /// Draws the window using a custom color and opacity.

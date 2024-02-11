@@ -1,12 +1,9 @@
 use crate::{
-    constants::ERR_EMPTY_NAME,
-    structures::BaseKeys,
     ui,
     widget::{Align, HWidget},
     WidgetType,
 };
 use gtk::{traits::*, *};
-use json::JsonValue;
 
 /// Creates a new basic box widget.
 pub struct BoxWidget {
