@@ -155,7 +155,7 @@ fn update_from_buffer(label: &Label) {
 // Implements HWidget for the widget so that we can actually use it.
 impl HWidget for LabelWidget {
     fn add(
-        mut self,
+        &mut self,
         name: &str,
         align: Align,
         left: &Box,

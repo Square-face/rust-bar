@@ -13,7 +13,7 @@ pub struct SpacingWidget {
 // Implements HWidget for the widget so that we can actually use it.
 impl HWidget for SpacingWidget {
     fn add(
-        self,
+        &mut self,
         name: &str,
         align: Align,
         left: &Box,

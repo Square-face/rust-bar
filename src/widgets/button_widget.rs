@@ -16,7 +16,7 @@ pub struct ButtonWidget {
 // Implements HWidget for the widget so that we can actually use it.
 impl HWidget for ButtonWidget {
     fn add(
-        mut self,
+        &mut self,
         name: &str,
         align: Align,
         left: &Box,
@@ -35,8 +35,9 @@ impl HWidget for ButtonWidget {
 
         // If the command isn't empty, subscribe to click events.
         if !self.command.is_empty() {
+            let command = self.command.clone();
             self.button.connect_clicked(move |_| {
-                execute!(&self.command);
+                execute!(&command);
             });
         }
 

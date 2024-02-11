@@ -55,27 +55,17 @@ pub fn build_widgets(window: &ApplicationWindow) {
 
 /// Creates all of the widgets.
 fn create_components(left: &Box, centered: &Box, right: &Box) {
-    for widget in get_widgets().left {
-        match widget {
-            WidgetType::Label(name, label) => {
-                label.add(name, Align::Left, left, centered, right, None)
-            }
-        }
+    let widgets = get_widgets();
+
+    for mut widget in widgets.0 {
+        widget.1.add(widget.0, Align::Left, left, centered, right, None)
     }
 
-    for widget in get_widgets().centered {
-        match widget {
-            WidgetType::Label(name, label) => {
-                label.add(name, Align::Centered, left, centered, right, None)
-            }
-        }
+    for mut widget in widgets.1 {
+        widget.1.add(widget.0, Align::Centered, left, centered, right, None)
     }
 
-    for widget in get_widgets().right {
-        match widget {
-            WidgetType::Label(name, label) => {
-                label.add(name, Align::Right, left, centered, right, None)
-            }
-        }
+    for mut widget in widgets.2 {
+        widget.1.add(widget.0, Align::Right, left, centered, right, None)
     }
 }

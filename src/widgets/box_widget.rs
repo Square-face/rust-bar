@@ -1,37 +1,34 @@
 use crate::{
     ui,
     widget::{Align, HWidget},
-    WidgetType,
+    Widgets,
 };
 use gtk::{traits::*, *};
 
 /// Creates a new basic box widget.
 pub struct BoxWidget {
     pub width: i32,
-    pub widgets: Vec<WidgetType>,
+    pub widgets: Widgets,
 }
 
 /// Builds the child widgets.
 fn build_child_widgets(
-    widgets: Vec<WidgetType>,
+    widgets: &mut Widgets,
     left: &Box,
     centered: &Box,
     right: &Box,
-    box_holder: &Box,
+    _box_holder: &Box,
 ) {
-    for widget in widgets {
-        match widget {
-            WidgetType::Label(name, label) => {
-                label.add(name, Align::Left, left, centered, right, Some(box_holder))
-            }
-        }
-    }
+
+    widgets.iter_mut().for_each(|widget| {
+        widget.1.add(&widget.0, Align::Right, left, centered, right, None);
+    })
 }
 
 // Implements HWidget for the widget so that we can actually use it.
 impl HWidget for BoxWidget {
     fn add(
-        self,
+        &mut self,
         name: &str,
         align: Align,
         left: &Box,
@@ -45,7 +42,7 @@ impl HWidget for BoxWidget {
 
         // 0.4.3: Experimental: Allow for widgets enclosed into boxes.
         // 0.4.7: Stabilize Box Child-Widgets.
-        build_child_widgets(self.widgets, left, centered, right, &widget);
+        build_child_widgets(&mut self.widgets, left, centered, right, &widget);
 
         ui::add_and_align(&widget, align, left, centered, right, box_holder);
         log!("Added a new box widget");

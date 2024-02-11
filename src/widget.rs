@@ -12,7 +12,7 @@ pub enum Align {
 pub trait HWidget {
     /// Invoked when the widget should be added.
     fn add(
-        self,
+        &mut self,
         name: &str,
         align: Align,
         left: &Box,
