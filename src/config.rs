@@ -6,6 +6,23 @@ use std::{
     sync::{RwLock, RwLockReadGuard},
 };
 
+/// Bar configuration
+pub const POSITION: Position = Position::TOP;
+pub const EXPAND_RIGHT: bool = true;
+pub const EXPAND_LEFT: bool = true;
+
+pub const UPDATE_RATE: u64 = 100;
+pub const CAVA_UPDATE_RATE: u64 = 1;
+pub const CAVA_SED: &str = "s/;//g;s/0/▁/g;s/1/▂/g;s/2/▃/g;s/3/▄/g;s/4/▅/g;s/5/▆/g;s/6/▇/g;s/7/█/g;";
+pub const CAVA_BARS: i32 = 5;
+pub const CAVA_FRAMERATE: i32 = 60;
+
+#[derive(PartialEq, Eq, Debug, Clone, Copy)]
+pub enum Position {
+    TOP,
+    BOTTOM,
+}
+
 lazy_static! {
     /// Cached config.
     pub static ref CONFIG: RwLock<JsonValue> = RwLock::new(read_config_raw());
@@ -21,12 +38,7 @@ pub fn get_path() -> String {
 
 /// Returns the set update-rate.
 pub fn get_update_rate() -> u64 {
-    let update_rate = conf!(RUSTBAR_ROOT_JSON, "update_rate", false, false)
-        .number
-        .unwrap_or_else(|| 100)
-        .clamp(5, 10_000);
-
-    update_rate.try_into().expect(ERR_PARSE_UPDATE_RATE)
+    UPDATE_RATE
 }
 
 // Parses and returns the config.
@@ -35,46 +47,9 @@ fn read_config_raw() -> JsonValue {
     conf_path.push_str(&environment::try_get_var("RUSTBAR_CONFIG", DEFAULT_CONFIG));
     json::parse(
         &fs::read_to_string(&conf_path)
-            // Don't panic if the file doesn't exist/couldn't be read. Instead use the example config.
-            .unwrap_or_else(|_| include_str!("../examples/config.json").to_owned()),
+            .unwrap(),
     )
     .unwrap_or_else(|error| panic!("[ERROR] Error parsing config: {error}"))
-}
-
-/// Tries to fetch a value from the config. Supported types are `String` and `i32`.
-pub fn try_get(root: &str, key: &str, is_string: bool, with_custom_variables: bool) -> ConfigData {
-    let cfg = &get_config()[root];
-    if cfg.has_key(key) {
-        let grabbed_value = &cfg[key];
-
-        // If the desired value isn't a string, try and get it as a 32-bit integer.
-        if !is_string {
-            return ConfigData::new(
-                None,
-                Some(
-                    grabbed_value
-                        .as_i32()
-                        .unwrap_or_else(|| panic!("[ERROR] Failed parsing {root}:{key} as i32!")),
-                ),
-            );
-        }
-
-        // Convert it to a string-value.
-        if with_custom_variables {
-            ConfigData::new(
-                Some(with_variables(
-                    grabbed_value.to_string(),
-                    &get_custom_variables(),
-                )),
-                None,
-            )
-        } else {
-            ConfigData::new(Some(grabbed_value.to_string()), None)
-        }
-    } else {
-        // The key wasn't found, so just return None on all values.
-        ConfigData::default()
-    }
 }
 
 /// Returns the entire config.

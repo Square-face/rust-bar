@@ -40,7 +40,7 @@ impl RevealerExtensions for RevealerTransitionType {
             "crossfade" => Some(RevealerTransitionType::Crossfade),
             "slide_left" => Some(RevealerTransitionType::SlideLeft),
             "slide_right" => Some(RevealerTransitionType::SlideRight),
-            _ => None
+            _ => None,
         }
-    } 
+    }
 }

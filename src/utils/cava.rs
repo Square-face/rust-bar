@@ -1,4 +1,4 @@
-use crate::{constants::*, widgets::cava_widget::CavaWidget};
+use crate::{constants::*, widgets::cava_widget::CavaWidget, CAVA_BARS, CAVA_FRAMERATE, CAVA_SED};
 use std::{fs::write, process::Stdio, sync::Mutex};
 use tokio::{
     io::{AsyncBufReadExt, BufReader},
@@ -19,27 +19,17 @@ lazy_static! {
 
 /// Gets the sed to use for Cava.
 pub fn get_sed() -> String {
-    conf!(RUSTBAR_ROOT_JSON, "cava_sed", true, false)
-        .string
-        .unwrap_or_else(|| {
-            "s/;//g;s/0/▁/g;s/1/▂/g;s/2/▃/g;s/3/▄/g;s/4/▅/g;s/5/▆/g;s/6/▇/g;s/7/█/g;".to_owned()
-        })
+    CAVA_SED.to_string()
 }
 
 /// Returns the amount of bars that should be present.
 fn get_bars() -> i32 {
-    let bars = conf!(RUSTBAR_ROOT_JSON, "cava_bars", false, false)
-        .number
-        .unwrap_or_else(|| 5);
-    bars.clamp(2, 16)
+    CAVA_BARS
 }
 
 /// Returns the desired framerate to use for Cava updates.
 fn get_framerate() -> i32 {
-    let framerate = conf!(RUSTBAR_ROOT_JSON, "cava_framerate", false, false)
-        .number
-        .unwrap_or_else(|| 60);
-    framerate.clamp(60, 360)
+    CAVA_FRAMERATE
 }
 
 /// Builds the temporary Cava configuration and then returns the path to it,

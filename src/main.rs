@@ -15,6 +15,7 @@ mod utils;
 mod widget;
 mod widgets;
 
+use config::*;
 use constants::*;
 use gtk::gdk::*;
 use gtk::gio::ApplicationFlags;
@@ -22,29 +23,16 @@ use gtk::prelude::*;
 use gtk::*;
 use gtk_layer_shell::Edge;
 use json::JsonValue;
-use std::path::Path;
 
 use crate::utils::hyprland;
 
 /// Gets the anchors.
 fn get_anchors() -> [(gtk_layer_shell::Edge, bool); 4] {
-    let expand_left = conf!(RUSTBAR_ROOT_JSON, "expand_left", true);
-    let expand_right = conf!(RUSTBAR_ROOT_JSON, "expand_right", true);
-
-    let pos = conf!(RUSTBAR_ROOT_JSON, "position", true, false)
-        .string
-        .unwrap_or_else(|| "Top".to_owned());
-
-    if !pos.eq_ignore_ascii_case("Top") && !pos.eq_ignore_ascii_case("Bottom") && !pos.is_empty() {
-        panic!("{}", ERR_INVALID_POS)
-    }
-
-    // If the position was valid, return the result.
     [
-        (Edge::Left, expand_left),
-        (Edge::Right, expand_right),
-        (Edge::Top, pos.eq_ignore_ascii_case("Top") || pos.is_empty()),
-        (Edge::Bottom, pos.eq_ignore_ascii_case("Bottom")),
+        (Edge::Left, EXPAND_LEFT),
+        (Edge::Right, EXPAND_RIGHT),
+        (Edge::Top, POSITION == Position::TOP),
+        (Edge::Bottom, POSITION == Position::BOTTOM),
     ]
 }
 
@@ -73,19 +61,13 @@ fn activate(application: &Application) {
 
     // Allows for specifing the namespace of the layer.
     // The default is "gtk-layer-shell" to not break existing configs.
-    let namespace = conf!(RUSTBAR_ROOT_JSON, "namespace", true, false)
-        .string
-        .unwrap_or_else(|| "gtk-layer-shell".to_owned());
-
-    gtk_layer_shell::set_namespace(&window, &namespace);
+    gtk_layer_shell::set_namespace(&window, "gtk-layer-shell");
 
     // Initialize gdk::Display by default value, which is decided by the compositor.
     let display = Display::default().expect(ERR_GET_DISPLAY);
 
     // Loads the monitor variable from config, default is 0.
-    let config_monitor = conf!(RUSTBAR_ROOT_JSON, "monitor", false, false)
-        .number
-        .unwrap_or_default();
+    let config_monitor = 0;
 
     // Gets the actual gdk::Monitor from configured number.
     let monitor = display.monitor(config_monitor).expect(ERR_GET_MONITOR);
@@ -104,24 +86,10 @@ fn activate(application: &Application) {
 /// Loads the CSS
 pub fn load_css() {
     let provider = CssProvider::new();
-    // 0.2.8: Allow for defining the name of the stylesheet to look up
-    let css_file = conf!(RUSTBAR_ROOT_JSON, "stylesheet", true, false)
-        .string
-        .unwrap_or_else(|| DEFAULT_CSS.to_owned());
 
-    let mut css_path = config::get_path();
-    css_path.push_str(&css_file);
-
-    if Path::new(&css_path).is_file() {
-        provider
-            .load_from_path(&css_path)
-            .unwrap_or_else(|error| panic!("[ERROR] Error loading stylesheet: {error}"))
-    } else {
-        provider
-            .load_from_data(include_bytes!("../examples/style.css"))
-            .expect(ERR_LOAD_SAMPLE_CSS);
-        log!("No custom stylesheet was found, using ../examples/style.css")
-    }
+    provider
+        .load_from_data(include_bytes!("../style.css"))
+        .expect(ERR_LOAD_SAMPLE_CSS);
 
     // Add the provider to the default screen
     StyleContext::add_provider_for_screen(

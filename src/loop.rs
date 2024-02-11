@@ -1,10 +1,10 @@
 use crate::{
     constants::{
-        ERR_ACCESS_CAVA_INSTANCES, ERR_PARSE_CAVA_UPDATE_RATE, RUSTBAR_ROOT_JSON,
-        WARN_CAVA_NO_BARS_INSTANCE, WARN_CAVA_NO_CRASHED_INSTANCE,
+        ERR_ACCESS_CAVA_INSTANCES, WARN_CAVA_NO_BARS_INSTANCE, WARN_CAVA_NO_CRASHED_INSTANCE,
     },
     utils::cava::{self, HAS_CAVA_CRASHED},
     widget::HWidget,
+    CAVA_UPDATE_RATE,
 };
 use glib::Continue;
 use std::time::Duration;
@@ -20,16 +20,7 @@ pub fn update() {
     }
 
     // Run the `update_cava` closure every x ms.
-    glib::timeout_add_local(
-        Duration::from_millis(
-            conf!(RUSTBAR_ROOT_JSON, "cava_update_rate", false, false)
-                .number
-                .unwrap_or_else(|| 1)
-                .try_into()
-                .expect(ERR_PARSE_CAVA_UPDATE_RATE),
-        ),
-        update_cava,
-    );
+    glib::timeout_add_local(Duration::from_millis(CAVA_UPDATE_RATE), update_cava);
 }
 
 /// Updates all Cava widgets.
