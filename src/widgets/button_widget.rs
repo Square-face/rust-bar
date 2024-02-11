@@ -1,7 +1,4 @@
-use crate::{
-    ui,
-    widget::{Align, HWidget},
-};
+use crate::widget::HWidget;
 use gtk::{glib::GString, traits::*, *};
 use std::{mem::take, time::Duration};
 
@@ -15,15 +12,7 @@ pub struct ButtonWidget {
 
 // Implements HWidget for the widget so that we can actually use it.
 impl HWidget for ButtonWidget {
-    fn add(
-        &mut self,
-        name: &str,
-        align: Align,
-        left: &Box,
-        centered: &Box,
-        right: &Box,
-        box_holder: Option<&Box>,
-    ) {
+    fn add(&mut self, name: &str, spot: &Box) {
         self.button.set_widget_name(name);
         // 0.2.8: Support tooltips for buttons
         self.button.set_tooltip_markup(Some(&self.tooltip));
@@ -41,7 +30,7 @@ impl HWidget for ButtonWidget {
             });
         }
 
-        ui::add_and_align(&self.button, align, left, centered, right, box_holder);
+        spot.add(&self.button);
         log!("Added a new button widget");
     }
 

@@ -1,24 +1,12 @@
 use gtk::Box;
 
-/// Widget alignment.
-#[derive(Clone, Copy)]
-pub enum Align {
-    Left,
-    Centered,
-    Right,
-}
-
 /// Implements basic traits for custom user-defined widgets.
 pub trait HWidget {
     /// Invoked when the widget should be added.
     fn add(
         &mut self,
         name: &str,
-        align: Align,
-        left: &Box,
-        centered: &Box,
-        right: &Box,
-        box_holder: Option<&Box>,
+        spot: &Box,
     );
 
     /// Label Widget: Tells the label to update content to the specified new content.

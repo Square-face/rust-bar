@@ -3,8 +3,7 @@ use crate::{
     constants::{
         ERR_NO_LINES, ERR_STRING_NONE, ERR_TAKE_STDOUT, ERR_WRONG_LABEL_RANIM, PROC_TARGET,
     },
-    ui,
-    widget::{Align, HWidget},
+    widget::HWidget,
 };
 use gtk::{glib::GString, traits::*, *};
 use std::{mem::take, process::Stdio, sync::Mutex, time::Duration};
@@ -154,15 +153,7 @@ fn update_from_buffer(label: &Label) {
 
 // Implements HWidget for the widget so that we can actually use it.
 impl HWidget for LabelWidget {
-    fn add(
-        &mut self,
-        name: &str,
-        align: Align,
-        left: &Box,
-        centered: &Box,
-        right: &Box,
-        box_holder: Option<&Box>,
-    ) {
+    fn add(&mut self, name: &str, spot: &Box) {
         let is_static = self.command.is_empty() || self.update_rate == 0;
         self.label.set_widget_name(name);
         self.label.set_markup(&self.text);
@@ -170,7 +161,7 @@ impl HWidget for LabelWidget {
         self.revealer.set_child(Some(&self.label));
         self.revealer
             .set_transition_type(self.update_anim.expect(ERR_WRONG_LABEL_RANIM));
-        ui::add_and_align(&self.revealer, align, left, centered, right, box_holder);
+        spot.add(&self.revealer);
 
         // 0.4.9: If the reveal_anim is unset, None or the label is static, then reveal instantly.
         if self.update_anim.is_none()

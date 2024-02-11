@@ -1,26 +1,5 @@
-use crate::widget::{Align, HWidget};
 use crate::{r#loop::update, *};
 use gtk::traits::*;
-
-/// Adds and aligns the specified widget.
-pub fn add_and_align(
-    widget: &impl IsA<Widget>,
-    align: Align,
-    left: &Box,
-    centered: &Box,
-    right: &Box,
-    box_holder: Option<&Box>,
-) {
-    if let Some(r#box) = box_holder {
-        r#box.add(widget)
-    } else {
-        match align {
-            Align::Left => left.add(widget),
-            Align::Centered => centered.add(widget),
-            Align::Right => right.add(widget),
-        }
-    }
-}
 
 /// Builds all of the widgets.
 pub fn build_widgets(window: &ApplicationWindow) {
@@ -58,14 +37,14 @@ fn create_components(left: &Box, centered: &Box, right: &Box) {
     let widgets = get_widgets();
 
     for mut widget in widgets.0 {
-        widget.1.add(widget.0, Align::Left, left, centered, right, None)
+        widget.1.add(widget.0, left)
     }
 
     for mut widget in widgets.1 {
-        widget.1.add(widget.0, Align::Centered, left, centered, right, None)
+        widget.1.add(widget.0, centered)
     }
 
     for mut widget in widgets.2 {
-        widget.1.add(widget.0, Align::Right, left, centered, right, None)
+        widget.1.add(widget.0, right)
     }
 }
