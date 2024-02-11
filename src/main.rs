@@ -24,9 +24,6 @@ use gtk::*;
 use gtk_layer_shell::Edge;
 use json::JsonValue;
 
-use crate::utils::hyprland;
-
-/// Gets the anchors.
 fn get_anchors() -> [(gtk_layer_shell::Edge, bool); 4] {
     [
         (Edge::Left, EXPAND_LEFT),
@@ -59,7 +56,7 @@ fn activate(application: &Application) {
         gtk_layer_shell::set_anchor(&window, anchor, state);
     }
 
-    // Allows for specifing the namespace of the layer.
+    // Allows for specifying the namespace of the layer.
     // The default is "gtk-layer-shell" to not break existing configs.
     gtk_layer_shell::set_namespace(&window, "gtk-layer-shell");
 
@@ -113,10 +110,6 @@ async fn main() {
         activate(app);
     });
 
-    if is_feature_active!("tray_experimental") {
-        tracing_subscriber::fmt::init();
-    }
-
     application.run();
 }
 
@@ -147,16 +140,8 @@ fn get_background_float(cfg: &JsonValue, identifier: &str, from_255: bool) -> f6
 
 /// Draws the window using a custom color and opacity.
 fn draw(_: &ApplicationWindow, ctx: &cairo::Context) -> Inhibit {
-    let cfg = config::CONFIG.read().unwrap();
-
-    // Fetch config for the values.
-    let r = get_background_float(&cfg, "r", true);
-    let g = get_background_float(&cfg, "g", true);
-    let b = get_background_float(&cfg, "b", true);
-    let a = get_background_float(&cfg, "a", false);
-
     // Apply
-    ctx.set_source_rgba(r, g, b, a);
+    ctx.set_source_rgba(COLORS.0, COLORS.1, COLORS.2, COLORS.3);
     ctx.set_operator(cairo::Operator::Screen);
     ctx.paint().expect(ERR_CUSTOM_DRAW);
     Inhibit(false)

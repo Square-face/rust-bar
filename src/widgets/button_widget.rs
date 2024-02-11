@@ -1,6 +1,5 @@
 use crate::{
     ui,
-    utils::aliases::use_aliases,
     widget::{Align, HWidget},
 };
 use gtk::{glib::GString, traits::*, *};
@@ -52,7 +51,7 @@ impl HWidget for ButtonWidget {
         let tick = move || {
             let mut new_tooltip = String::default();
             new_tooltip.push_str(&tooltip);
-            new_tooltip.push_str(&use_aliases(&tooltip_command));
+            new_tooltip.push_str(&tooltip_command);
 
             let tooltip_markup = button.tooltip_markup().unwrap_or_else(|| GString::from(""));
             if !tooltip_markup.eq(&new_tooltip) {

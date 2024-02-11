@@ -4,7 +4,6 @@ use crate::{
         ERR_NO_LINES, ERR_STRING_NONE, ERR_TAKE_STDOUT, ERR_WRONG_LABEL_RANIM, PROC_TARGET,
     },
     ui,
-    utils::aliases::use_aliases,
     widget::{Align, HWidget},
 };
 use gtk::{glib::GString, traits::*, *};
@@ -75,7 +74,7 @@ fn start_tooltip_loop(label_ref: &mut LabelWidget) {
     let tick = move || {
         let mut new_tooltip = String::default();
         new_tooltip.push_str(&tooltip);
-        new_tooltip.push_str(&use_aliases(&tooltip_command));
+        new_tooltip.push_str(&tooltip_command);
 
         let tooltip_markup = label.tooltip_markup().unwrap_or_else(|| GString::from(""));
         if !tooltip_markup.eq(&new_tooltip) {
@@ -109,7 +108,7 @@ fn start_label_loop(label_ref: &mut LabelWidget) {
         if !listen {
             let mut new_text = String::default();
             new_text.push_str(&text);
-            new_text.push_str(&use_aliases(&command));
+            new_text.push_str(&command);
 
             if !label.text().eq(&new_text) {
                 restart_revealer!(

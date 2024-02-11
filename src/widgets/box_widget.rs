@@ -3,6 +3,7 @@ use crate::{
     structures::BaseKeys,
     ui,
     widget::{Align, HWidget},
+    WidgetType,
 };
 use gtk::{traits::*, *};
 use json::JsonValue;
@@ -10,57 +11,23 @@ use json::JsonValue;
 /// Creates a new basic box widget.
 pub struct BoxWidget {
     pub width: i32,
-    pub widgets: JsonValue,
+    pub widgets: Vec<WidgetType>,
 }
 
 /// Builds the child widgets.
 fn build_child_widgets(
-    widgets: JsonValue,
+    widgets: Vec<WidgetType>,
     left: &Box,
     centered: &Box,
     right: &Box,
     box_holder: &Box,
 ) {
-    const SEPARATOR: &str = "_";
-    let relevant = widgets.entries().filter(|(key, _)| key.contains(SEPARATOR));
-
-    for (key, json) in relevant {
-        // Gets the widget identifiers.
-        let identifiers: Vec<_> = key.split(SEPARATOR).collect();
-
-        // Type example: `label_ABC` <= `label` is the IDENTIFIER, `ABC` is the NAME.
-        let widget_type = identifiers[0];
-
-        // Base keys.
-        let (text, command, update_rate, tooltip, tooltip_command) = ui::get_base_keys(json);
-        let base_keys = BaseKeys {
-            text,
-            command,
-            update_rate,
-            tooltip,
-            tooltip_command,
-            alignment: Align::Left, // <= Doesn't matter as it won't be used.
-        };
-
-        let widget_name = identifiers[1..].join(SEPARATOR);
-        if widget_name.is_empty() {
-            panic!("{}", ERR_EMPTY_NAME)
+    for widget in widgets {
+        match widget {
+            WidgetType::Label(name, label) => {
+                label.add(name, Align::Left, left, centered, right, Some(box_holder))
+            }
         }
-
-        log!(format!(
-            "Adding child widget '{widget_name}', type '{widget_type}' into '{}'!",
-            box_holder.widget_name()
-        ));
-
-        // Add the widget.
-        ui::add_widget(
-            json,
-            (widget_type, &widget_name),
-            base_keys,
-            (left, centered, right),
-            widget_type,
-            Some(box_holder),
-        )
     }
 }
 
@@ -81,9 +48,7 @@ impl HWidget for BoxWidget {
 
         // 0.4.3: Experimental: Allow for widgets enclosed into boxes.
         // 0.4.7: Stabilize Box Child-Widgets.
-        if !self.widgets.is_null() {
-            build_child_widgets(self.widgets, left, centered, right, &widget)
-        }
+        build_child_widgets(self.widgets, left, centered, right, &widget);
 
         ui::add_and_align(&widget, align, left, centered, right, box_holder);
         log!("Added a new box widget");
