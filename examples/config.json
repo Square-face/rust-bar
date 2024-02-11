@@ -14,7 +14,7 @@
         "update_rate": 50000
     },
     "centered-label_centerdummy": {
-        "text": "Example Config - Create/Edit yours at ~/.config/HybridBar/config.json",
+        "text": "Example Config - Create/Edit yours at ~/.config/Rust-Bar/config.json",
         "tooltip": "An example of a centered label"
     },
     "right-label_rightdummy": {

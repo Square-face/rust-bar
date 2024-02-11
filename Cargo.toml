@@ -1,12 +1,12 @@
 [package]
-name = "hybrid-bar"
-description = "A simple status bar made for wlroots compositors."
-authors = [ "varsity <refined@skiff.com>" ]
+name = "rust-bar"
+description = "A wayland status bar written and configured in rust"
+authors = [ "Square-face <linus.michelsson@gmail.com>" ]
 readme = "README.md"
-repository = "https://github.com/vars1ty/HybridBar"
+repository = "https://github.com/Square-face/rust-bar.git"
 keywords = [ "hyprland", "wayland", "status-bar", "gtk-layer-shell", "linux" ]
 categories = [ "rendering", "gui" ]
-version = "0.4.9"
+version = "0.1.0"
 edition = "2021"
 license = "MIT"
 

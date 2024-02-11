@@ -803,22 +803,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
-name = "hybrid-bar"
-version = "0.4.9"
-dependencies = [
- "glib",
- "gtk",
- "gtk-layer-shell",
- "hyprland",
- "json",
- "lazy_static",
- "lxinfo",
- "stray",
- "tokio",
- "tracing-subscriber",
-]
-
-[[package]]
 name = "hyprland"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1294,6 +1278,22 @@ name = "regex-syntax"
 version = "0.6.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "456c603be3e8d448b072f410900c09faf164fbce2d480456f50eea6e25f9c848"
+
+[[package]]
+name = "rust-bar"
+version = "0.1.0"
+dependencies = [
+ "glib",
+ "gtk",
+ "gtk-layer-shell",
+ "hyprland",
+ "json",
+ "lazy_static",
+ "lxinfo",
+ "stray",
+ "tokio",
+ "tracing-subscriber",
+]
 
 [[package]]
 name = "rustc_version"

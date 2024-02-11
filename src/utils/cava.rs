@@ -19,7 +19,7 @@ lazy_static! {
 
 /// Gets the sed to use for Cava.
 pub fn get_sed() -> String {
-    conf!(HYBRID_ROOT_JSON, "cava_sed", true, false)
+    conf!(RUSTBAR_ROOT_JSON, "cava_sed", true, false)
         .string
         .unwrap_or_else(|| {
             "s/;//g;s/0/▁/g;s/1/▂/g;s/2/▃/g;s/3/▄/g;s/4/▅/g;s/5/▆/g;s/6/▇/g;s/7/█/g;".to_owned()
@@ -28,7 +28,7 @@ pub fn get_sed() -> String {
 
 /// Returns the amount of bars that should be present.
 fn get_bars() -> i32 {
-    let bars = conf!(HYBRID_ROOT_JSON, "cava_bars", false, false)
+    let bars = conf!(RUSTBAR_ROOT_JSON, "cava_bars", false, false)
         .number
         .unwrap_or_else(|| 5);
     bars.clamp(2, 16)
@@ -36,7 +36,7 @@ fn get_bars() -> i32 {
 
 /// Returns the desired framerate to use for Cava updates.
 fn get_framerate() -> i32 {
-    let framerate = conf!(HYBRID_ROOT_JSON, "cava_framerate", false, false)
+    let framerate = conf!(RUSTBAR_ROOT_JSON, "cava_framerate", false, false)
         .number
         .unwrap_or_else(|| 60);
     framerate.clamp(60, 360)

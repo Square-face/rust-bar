@@ -1,11 +1,11 @@
 // This file is meant for holding constant strings / repeatedly-used numerical values.
 
-/// Master Hybrid JSON Key.
-pub const HYBRID_ROOT_JSON: &str = "hybrid";
+/// Master Rustbar JSON Key.
+pub const RUSTBAR_ROOT_JSON: &str = "hybrid";
 /// Master Variables JSON Key.
-pub const HYBRID_V_ROOT_JSON: &str = "variables";
+pub const RUSTBAR_V_ROOT_JSON: &str = "variables";
 /// Master Features JSON Key.
-pub const HYBRID_F_ROOT_JSON: &str = "features";
+pub const RUSTBAR_F_ROOT_JSON: &str = "features";
 /// Process to be used for calling external commands.
 pub const PROC_TARGET: &str = "sh";
 /// Default stylesheet file.
@@ -29,7 +29,7 @@ pub const ERR_GET_MONITOR: &str = "[ERROR] Couldn't find a valid monitor.";
 pub const ERR_SCREEN_DEFAULT: &str = "[ERROR] Couldn't find a valid screen!";
 pub const ERR_LOAD_SAMPLE_CSS: &str = "[ERROR] Failed loading the example stylesheet!";
 pub const ERR_CUSTOM_DRAW: &str =
-    "[ERROR] Failed drawing Hybrid using custom color sources, which is needed for transparency!";
+    "[ERROR] Failed drawing Rust-bar using custom color sources, which is needed for transparency!";
 pub const ERR_INVALID_WIDGET_FORMAT: &str =
     "[ERROR] Widgets should be named as [alignment]-[widget_type]_[name]";
 pub const ERR_EMPTY_NAME: &str =
@@ -51,7 +51,7 @@ pub const ERR_WRONG_LABEL_RANIM: &str =
 
 // Constant warnings.
 
-pub const WARN_CAVA_NO_LINES: &str = "[WARN] Cava: There are no more lines available. Hybrid will keep on running but Cava will be stopped!";
+pub const WARN_CAVA_NO_LINES: &str = "[WARN] Cava: There are no more lines available. Rust-Bar will keep on running but Cava will be stopped!";
 pub const WARN_CAVA_NO_BARS_INSTANCE: &str = "[WARN] Cava: Failed accessing cava::BARS, stopping!";
 pub const WARN_CAVA_NO_CRASHED_INSTANCE: &str =
     "[WARN] Cava: Failed accessing cava::HAS_CAVA_CRASHED, stopping!";

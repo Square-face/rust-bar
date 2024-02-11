@@ -28,10 +28,10 @@ use crate::utils::hyprland;
 
 /// Gets the anchors.
 fn get_anchors() -> [(gtk_layer_shell::Edge, bool); 4] {
-    let expand_left = conf!(HYBRID_ROOT_JSON, "expand_left", true);
-    let expand_right = conf!(HYBRID_ROOT_JSON, "expand_right", true);
+    let expand_left = conf!(RUSTBAR_ROOT_JSON, "expand_left", true);
+    let expand_right = conf!(RUSTBAR_ROOT_JSON, "expand_right", true);
 
-    let pos = conf!(HYBRID_ROOT_JSON, "position", true, false)
+    let pos = conf!(RUSTBAR_ROOT_JSON, "position", true, false)
         .string
         .unwrap_or_else(|| "Top".to_owned());
 
@@ -73,7 +73,7 @@ fn activate(application: &Application) {
 
     // Allows for specifing the namespace of the layer.
     // The default is "gtk-layer-shell" to not break existing configs.
-    let namespace = conf!(HYBRID_ROOT_JSON, "namespace", true, false)
+    let namespace = conf!(RUSTBAR_ROOT_JSON, "namespace", true, false)
         .string
         .unwrap_or_else(|| "gtk-layer-shell".to_owned());
 
@@ -83,7 +83,7 @@ fn activate(application: &Application) {
     let display = Display::default().expect(ERR_GET_DISPLAY);
 
     // Loads the monitor variable from config, default is 0.
-    let config_monitor = conf!(HYBRID_ROOT_JSON, "monitor", false, false)
+    let config_monitor = conf!(RUSTBAR_ROOT_JSON, "monitor", false, false)
         .number
         .unwrap_or_default();
 
@@ -105,7 +105,7 @@ fn activate(application: &Application) {
 pub fn load_css() {
     let provider = CssProvider::new();
     // 0.2.8: Allow for defining the name of the stylesheet to look up
-    let css_file = conf!(HYBRID_ROOT_JSON, "stylesheet", true, false)
+    let css_file = conf!(RUSTBAR_ROOT_JSON, "stylesheet", true, false)
         .string
         .unwrap_or_else(|| DEFAULT_CSS.to_owned());
 
@@ -164,7 +164,7 @@ fn set_visual(window: &ApplicationWindow, screen: Option<&Screen>) {
 
 /// Converts the value of a child inside `background` to a `f64`.
 fn get_background_float(cfg: &JsonValue, identifier: &str, from_255: bool) -> f64 {
-    let mut res = cfg[HYBRID_ROOT_JSON][identifier]
+    let mut res = cfg[RUSTBAR_ROOT_JSON][identifier]
         .as_f64()
         .unwrap_or_else(|| panic!("[ERROR] Failed converting hybrid:{identifier} to f64!"));
 

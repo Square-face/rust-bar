@@ -11,17 +11,17 @@ lazy_static! {
     pub static ref CONFIG: RwLock<JsonValue> = RwLock::new(read_config_raw());
 }
 
-/// Gets the root home path to Hybrid.
+/// Gets the root home path to Rust-Bar.
 pub fn get_path() -> String {
     format!(
-        "{}/.config/HybridBar/",
+        "{}/.config/RustBar/",
         std::env::var("HOME").unwrap_or_else(|_| execute!("whoami"))
     )
 }
 
 /// Returns the set update-rate.
 pub fn get_update_rate() -> u64 {
-    let update_rate = conf!(HYBRID_ROOT_JSON, "update_rate", false, false)
+    let update_rate = conf!(RUSTBAR_ROOT_JSON, "update_rate", false, false)
         .number
         .unwrap_or_else(|| 100)
         .clamp(5, 10_000);
@@ -32,7 +32,7 @@ pub fn get_update_rate() -> u64 {
 // Parses and returns the config.
 fn read_config_raw() -> JsonValue {
     let mut conf_path = get_path();
-    conf_path.push_str(&environment::try_get_var("HYBRID_CONFIG", DEFAULT_CONFIG));
+    conf_path.push_str(&environment::try_get_var("RUSTBAR_CONFIG", DEFAULT_CONFIG));
     json::parse(
         &fs::read_to_string(&conf_path)
             // Don't panic if the file doesn't exist/couldn't be read. Instead use the example config.
@@ -84,7 +84,7 @@ pub fn get_config<'a>() -> RwLockReadGuard<'a, JsonValue> {
 
 /// Gets all the custom variables.
 pub fn get_custom_variables() -> HashMap<String, String> {
-    let cfg = &get_config()[HYBRID_V_ROOT_JSON];
+    let cfg = &get_config()[RUSTBAR_V_ROOT_JSON];
     let mut map: HashMap<String, String> = HashMap::new();
     for entry in cfg.entries() {
         map.insert(entry.0.to_owned(), entry.1.to_string());

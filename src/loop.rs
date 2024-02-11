@@ -1,6 +1,6 @@
 use crate::{
     constants::{
-        ERR_ACCESS_CAVA_INSTANCES, ERR_PARSE_CAVA_UPDATE_RATE, HYBRID_ROOT_JSON,
+        ERR_ACCESS_CAVA_INSTANCES, ERR_PARSE_CAVA_UPDATE_RATE, RUSTBAR_ROOT_JSON,
         WARN_CAVA_NO_BARS_INSTANCE, WARN_CAVA_NO_CRASHED_INSTANCE,
     },
     utils::cava::{self, HAS_CAVA_CRASHED},
@@ -22,7 +22,7 @@ pub fn update() {
     // Run the `update_cava` closure every x ms.
     glib::timeout_add_local(
         Duration::from_millis(
-            conf!(HYBRID_ROOT_JSON, "cava_update_rate", false, false)
+            conf!(RUSTBAR_ROOT_JSON, "cava_update_rate", false, false)
                 .number
                 .unwrap_or_else(|| 1)
                 .try_into()

@@ -242,7 +242,7 @@ fn start_communication_thread(
 
         runtime.block_on(async {
             let tray = StatusNotifierWatcher::new(cmd_rx).await.unwrap();
-            let mut host = tray.create_notifier_host("Hybrid").await.unwrap();
+            let mut host = tray.create_notifier_host("Rust-Bar").await.unwrap();
 
             while let Ok(message) = host.recv().await {
                 sender.send(message).await.expect(ERR_SEND_MSG_UI);
